@@ -21,7 +21,7 @@ def train_lstm_model(features, targets):
     model.compile(optimizer='adam', loss='mse')
 
     # Huấn luyện mô hình với 100 epochs
-    model.fit(features, scaled_targets, epochs=5, verbose=1)
+    model.fit(features, scaled_targets, epochs=100, verbose=1)
 
     return model, scaler
 
