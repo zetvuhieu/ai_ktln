@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from models.lstm_model import train_lstm_model, predict_water_consumption_for_next_month
 import datetime
 import numpy as np
+import os
 
 app = Flask(__name__)
 
