@@ -86,4 +86,7 @@ def predict_water():
     })
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Lấy port từ môi trường, nếu không có thì sử dụng cổng 5000 mặc định
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=True)
+
