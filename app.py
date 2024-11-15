@@ -3,49 +3,21 @@ from models.lstm_model import train_lstm_model, predict_water_consumption_for_ne
 import datetime
 import numpy as np
 import os
+import json
 
 app = Flask(__name__)
 
 @app.route('/predict_water_consumption', methods=['GET'])
 def predict_water():
-    weather_data = [
-        {'month': '01', 'humidity': 71, 'temp': 22, 'rainfall': 7, 'vol': 200},  
-        {'month': '02', 'humidity': 70, 'temp': 24, 'rainfall': 2, 'vol': 204}, 
-        {'month': '03', 'humidity': 71, 'temp': 26, 'rainfall': 8, 'vol': 195}, 
-        {'month': '04', 'humidity': 72, 'temp': 28, 'rainfall': 15, 'vol': 185}, 
-        {'month': '05', 'humidity': 74, 'temp': 28, 'rainfall': 49, 'vol': 149}, 
-        {'month': '06', 'humidity': 77, 'temp': 27, 'rainfall': 60, 'vol': 137}, 
-        {'month': '07', 'humidity': 76, 'temp': 27, 'rainfall': 53, 'vol': 144}, 
-        {'month': '08', 'humidity': 79, 'temp': 26, 'rainfall': 66, 'vol': 129}, 
-        {'month': '09', 'humidity': 89, 'temp': 26, 'rainfall': 102, 'vol': 85}, 
-        {'month': '10', 'humidity': 95, 'temp': 25, 'rainfall': 121, 'vol': 80}, 
-        {'month': '11', 'humidity': 82, 'temp': 24, 'rainfall': 85, 'vol': 119}, 
-        {'month': '12', 'humidity': 72, 'temp': 22, 'rainfall': 35, 'vol': 171}, 
-        {'month': '01', 'humidity': 61, 'temp': 22, 'rainfall': 7, 'vol': 210},  
-        {'month': '02', 'humidity': 75, 'temp': 24, 'rainfall': 2, 'vol': 199}, 
-        {'month': '03', 'humidity': 71, 'temp': 28, 'rainfall': 12, 'vol': 189}, 
-        {'month': '04', 'humidity': 72, 'temp': 28, 'rainfall': 15, 'vol': 185}, 
-        {'month': '05', 'humidity': 74, 'temp': 28, 'rainfall': 49, 'vol': 149}, 
-        {'month': '06', 'humidity': 77, 'temp': 27, 'rainfall': 60, 'vol': 137}, 
-        {'month': '07', 'humidity': 76, 'temp': 27, 'rainfall': 53, 'vol': 144}, 
-        {'month': '08', 'humidity': 79, 'temp': 26, 'rainfall': 66, 'vol': 129}, 
-        {'month': '09', 'humidity': 89, 'temp': 26, 'rainfall': 102, 'vol': 85}, 
-        {'month': '10', 'humidity': 95, 'temp': 25, 'rainfall': 121, 'vol': 80},
-        {'month': '01', 'humidity': 71, 'temp': 22, 'rainfall': 7, 'vol': 200},  
-        {'month': '02', 'humidity': 70, 'temp': 24, 'rainfall': 2, 'vol': 204}, 
-        {'month': '03', 'humidity': 71, 'temp': 26, 'rainfall': 8, 'vol': 195}, 
-        {'month': '04', 'humidity': 72, 'temp': 28, 'rainfall': 15, 'vol': 185}, 
-        {'month': '05', 'humidity': 74, 'temp': 28, 'rainfall': 49, 'vol': 149}, 
-        {'month': '06', 'humidity': 77, 'temp': 27, 'rainfall': 60, 'vol': 137}, 
-        {'month': '07', 'humidity': 76, 'temp': 27, 'rainfall': 53, 'vol': 144}, 
-        {'month': '08', 'humidity': 79, 'temp': 26, 'rainfall': 66, 'vol': 129}, 
-        {'month': '09', 'humidity': 89, 'temp': 26, 'rainfall': 102, 'vol': 85}, 
-        {'month': '10', 'humidity': 95, 'temp': 25, 'rainfall': 121, 'vol': 80}, 
-        {'month': '11', 'humidity': 82, 'temp': 24, 'rainfall': 85, 'vol': 119}, 
-        {'month': '12', 'humidity': 72, 'temp': 22, 'rainfall': 35, 'vol': 171}, 
-        {'month': '11', 'humidity': 82, 'temp': 24, 'rainfall': 85, 'vol': 119}, 
-        {'month': '12', 'humidity': 72, 'temp': 22, 'rainfall': 40, 'vol': 166},
-    ]
+   # Đọc dữ liệu thời tiết từ file JSON
+    try:
+        with open('data/data.json', 'r') as file:
+            weather_data = json.load(file)
+            print(weather_data)
+    except FileNotFoundError:
+        return jsonify({"error": "File dữ liệu không tìm thấy."}), 404
+    except json.JSONDecodeError:
+        return jsonify({"error": "Dữ liệu trong file không hợp lệ."}), 400
 
     # Chuẩn bị dữ liệu cho mô hình
     features = []
