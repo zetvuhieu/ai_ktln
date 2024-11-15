@@ -13,7 +13,6 @@ def predict_water():
     try:
         with open('data/data.json', 'r') as file:
             weather_data = json.load(file)
-            print(weather_data)
     except FileNotFoundError:
         return jsonify({"error": "File dữ liệu không tìm thấy."}), 404
     except json.JSONDecodeError:
