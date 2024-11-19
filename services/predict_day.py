@@ -1,6 +1,6 @@
 import numpy as np
 from models.lstm_model import train_lstm_model, predict_water_consumption_for_next_month
-from services.ok import fetch_weather_for_tomorrow
+from services.weather_service import fetch_weather_for_tomorrow
 import json
 
 def predict_day():
