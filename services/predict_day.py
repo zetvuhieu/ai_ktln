@@ -2,6 +2,7 @@ import numpy as np
 from models.lstm_model import train_lstm_model, predict_water_consumption_for_next_month
 from services.weather_service import fetch_weather_for_tomorrow
 import json
+from flask import jsonify
 
 def predict_day():
     # Dữ liệu thời tiết từ file JSON
@@ -59,9 +60,15 @@ def predict_day():
     predicted_water = predict_water_consumption_for_next_month(
         model, scaler, tomorrow_features
     )
-
-    # Kết quả dự đoán
-    return {
+    result = {
         "predicted_water_consumption": float(predicted_water),
         "day": weather_tomorrow["day"]
     }
+
+    # In kết quả ra console
+    print("Predicted Result:", result)
+
+    # Trả về kết quả
+    return result
+    
+   

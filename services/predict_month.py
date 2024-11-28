@@ -46,8 +46,13 @@ def predict_water():
     predicted_water = predict_water_consumption_for_next_month(
         model, scaler, next_month_features)
 
-    # Trả về kết quả
-    return jsonify({
+   # Kết quả dự đoán
+    result = {
         "predicted_water_consumption": float(predicted_water),
         "next_month": next_month_str
-    })
+    }
+
+    # In kết quả ra console
+    print(result)
+
+    return jsonify(result)
